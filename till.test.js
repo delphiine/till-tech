@@ -45,4 +45,15 @@ describe('Till', () => {
     );
   });
 
+  it('prints a formatted receipt', () => {
+    const till = new Till;
+    till.addOrder('Tea', 'Jane');
+    till.addOrder('Tea', 'Jane')
+    till.addOrder('Cortado', 'Jane')
+    till.addOrder('Cafe Latte', 'Jade');
+    expect(till.printReceipt()).toEqual(
+      "Jane\n2 x Tea\n1 x Cortado\nJade\n1 x Cafe Latte"
+    );
+  });
+
 });
