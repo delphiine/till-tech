@@ -9,23 +9,24 @@ describe('Till', () => {
   it('adds 1 item to this.items', () => {
     const till = new Till;
     till.addItem('Cafe Latte')
-    expect(till.getItems()).toEqual({"Cafe Latte": [4.75, 1]})
+    expect(till.getItems()).toEqual({"Cafe Latte": {price: 4.75, amount: 1}})
   });
 
   it('adds multiple items to this.items', () => {
     const till = new Till;
     till.addItem('Cafe Latte')
     till.addItem('Tea')
-    expect(till.getItems()).toEqual({"Cafe Latte": [4.75, 1], "Tea": [3.65, 1]})
+    expect(till.getItems()).toEqual(
+      {"Cafe Latte": {price: 4.75, amount: 1}, "Tea": {price: 3.65, amount: 1}})
   });
 
   it('adds multiple items to this.items', () => {
     const till = new Till;
     till.addItem('Tea')
-    expect(till.getItems()).toEqual({"Tea": [3.65, 1]})
+    expect(till.getItems()).toEqual({"Tea": {price: 3.65, amount: 1}})
 
     till.addItem('Tea')
-    expect(till.getItems()).toEqual({"Tea": [7.3, 2]})
+    expect(till.getItems()).toEqual({"Tea": {price: 7.3, amount: 2}})
   });
 
 });
