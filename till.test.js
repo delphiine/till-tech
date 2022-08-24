@@ -22,6 +22,14 @@ describe('Till', () => {
       {"Jane":  {"Cafe Latte": {"amount": 1, "price": 4.75, }, "Tea": { "amount": 1, "price": 3.65}}})
   });
 
+  it('adds order by different customers', () => {
+    const till = new Till;
+    till.addOrder('Cafe Latte', 'Jane')
+    till.addOrder('Tea','Jade')
+    expect(till.getOrder()).toEqual(
+      {"Jade": {"Tea": {"amount": 1, "price": 3.65}}, "Jane": {"Cafe Latte": {"amount": 1, "price": 4.75}}})
+  });
+
   it('sums the price and increase the amount counter', () => {
     const till = new Till;
     till.addOrder('Tea', 'Jane')
