@@ -55,5 +55,4 @@ describe('Till', () => {
       "Jane\n2 x Tea\n1 x Cortado\nJade\n1 x Cafe Latte"
     );
   });
-
 });
