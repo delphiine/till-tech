@@ -3,35 +3,36 @@ const Till = require('./till.js');
 describe('Till', () => {
   it('this.items is initially empty', () => {
     const till = new Till
-    expect(till.getItems()).toEqual({})
+    expect(till.getOrder()).toEqual({})
   })
 
-  it('adds 1 item to this.items', () => {
+  it('adds 1 item to the order', () => {
     const till = new Till;
-    till.addItem('Cafe Latte')
-    expect(till.getItems()).toEqual({"Cafe Latte": {price: 4.75, amount: 1}})
+    till.addOrder('Cafe Latte', 'Jane')
+    expect(till.getOrder()).toEqual(
+      {"Jane": {"Cafe Latte": {"amount": 1, "price": 4.75}}}
+    )
   });
 
-  it('adds multiple items to this.items', () => {
+  it('adds multiple items to the order', () => {
     const till = new Till;
-    till.addItem('Cafe Latte')
-    till.addItem('Tea')
-    expect(till.getItems()).toEqual(
-      {"Cafe Latte": {price: 4.75, amount: 1}, "Tea": {price: 3.65, amount: 1}})
+    till.addOrder('Cafe Latte', 'Jane')
+    till.addOrder('Tea','Jane')
+    expect(till.getOrder()).toEqual(
+      {"Jane":  {"Cafe Latte": {"amount": 1, "price": 4.75, }, "Tea": { "amount": 1, "price": 3.65}}})
   });
 
-  it('adds multiple items to this.items', () => {
+  it('sums the price and increase the amount counter', () => {
     const till = new Till;
-    till.addItem('Tea')
-    expect(till.getItems()).toEqual({"Tea": {price: 3.65, amount: 1}})
+    till.addOrder('Tea', 'Jane')
+    expect(till.getOrder()).toEqual(
+      {"Jane": {"Tea": {"amount": 1,"price": 3.65}}}
+    )
 
-    till.addItem('Tea')
-    expect(till.getItems()).toEqual({"Tea": {price: 7.3, amount: 2}})
-  });
-
-  it('getCustomerName() returns the name of the customer', () => {
-    const till = new Till;
-    expect(till.getCustomerName('Jane')).toEqual('Jane');
+    till.addOrder('Tea', 'Jane')
+    expect(till.getOrder()).toEqual(
+      {"Jane": {"Tea": {"amount": 2, "price": 7.3}}}
+    )
   });
 
 });
