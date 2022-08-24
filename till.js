@@ -23,21 +23,23 @@ class Till {
     }
   }
 
+  setReceiptVariables () {
+    this.customerName = "";
+    this.itemName = "";
+    this.amount = 0;
+    this.items = {};
+  }
+
   formatReceipt () {
     let receipt = [];
-    let customerName = "";
-    let itemName = "";
-    let amount = 0;
-    this.items = {};
     for (let [key, value] of Object.entries(this.order)) {
-      customerName = key;
-      receipt.push(`${customerName}`);
+      this.customerName = key;
+      receipt.push(`${this.customerName}`);
       this.items = value;
-      console.log("order", value);
       for (let [key, value] of Object.entries(this.items)) {
-        itemName = key;
-        amount = value.amount;
-        receipt.push(`${amount} x ${itemName}`);
+        this.itemName = key;
+        this.amount = value.amount;
+        receipt.push(`${this.amount} x ${this.itemName}`);
       }
     }
     return receipt.join('\n');
