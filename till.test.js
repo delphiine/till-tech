@@ -2,7 +2,7 @@ const Till = require('./till.js');
 
 describe('Till', () => {
   it('this.items is initially empty', () => {
-    const till = new Till;
+    const till = new Till
     expect(till.getItems()).toEqual({})
   })
 
@@ -27,6 +27,11 @@ describe('Till', () => {
 
     till.addItem('Tea')
     expect(till.getItems()).toEqual({"Tea": {price: 7.3, amount: 2}})
+  });
+
+  it('getCustomerName() returns the name of the customer', () => {
+    const till = new Till;
+    expect(till.getCustomerName('Jane')).toEqual('Jane');
   });
 
 });
