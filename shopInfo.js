@@ -30,8 +30,12 @@ class ShopInfo {
     return this.formatPhoneNumber();
   }
 
+  getMenu () {
+    return this.menu;
+  }
+
   formatMenu () {
-    const menuHeader = 'Welcom to The Coffee Connection\n\nTodays Menu:\n';
+    const menuHeader = 'Welcom to The Coffee Connection!\n\nTodays Menu:\n';
     let menuItems = "";
     for (const [key, value] of Object.entries(this.menu)) {
       menuItems += `${key}: $${value}\n`;
