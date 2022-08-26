@@ -18,7 +18,15 @@
   },
   "homepage": "https://github.com/delphiine/till-tech#readme",
   "dependencies": {
+    "eslint-plugin-jest": "^26.8.7",
     "jest": "^28.1.3",
     "prompt-sync": "^4.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.22.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-promise": "^6.0.1"
   }
 }
