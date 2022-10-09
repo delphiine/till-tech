@@ -1,55 +1,77 @@
-const fs = require('fs');
+const ShopInfo = require('./shopInfo')
 
 class Till {
-  constructor () {
-    this.order = {};
-    this.shopDetails = JSON.parse(fs.readFileSync('./hipstercoffee.json'))[0];
-    this.menu = this.shopDetails.prices[0]; 
-  }
-
-  getOrder () {
-    return this.order;
-  }
-
-  addOrder (item, customer) {
-    if (!(customer in this.order)) {
-      this.order[customer] = {};
-    }
-    if (item in this.menu && !(item in this.order[customer])) {
-      this.order[customer][item] = {price: this.menu[item], amount: 1};
-    } else if (item in this.order[customer]) {
-      this.order[customer][item].price += this.menu[item];
-      this.order[customer][item].amount++;
+  constructor (order, shopInfo, payment) {
+    this.order = order;
+    this.payment = payment;
+    this.shopInfo = shopInfo;
+    if (!shopInfo) {
+      this.shopInfo = new ShopInfo();
     }
   }
 
-  setReceiptVariables () {
-    this.customerName = "";
-    this.itemName = "";
-    this.amount = 0;
-    this.items = {};
+  getPreTaxTotal () {
+    const order = this.order.getOrders()
+    let totalPrice = 0
+    for (const [customer, value] of Object.entries(order)) {
+      for (const [itemName, item] of Object.entries(value)) {
+        let totalItemCustomerPrice = item.price * item.amount;
+        if (itemName.includes('Muffin')) {
+          totalItemCustomerPrice *= 0.9;
+        }
+        totalPrice += totalItemCustomerPrice;
+      }
+    }
+
+    if (totalPrice >= 50) {
+      totalPrice *= 0.95;
+    }
+    return this.getTwoDecimals(totalPrice)
+  }
+
+  getTotalTax(totalPrice) {
+    return this.getTwoDecimals(totalPrice * 0.0864)
+  }
+
+  getTwoDecimals(number) {
+    return Number((Math.round(number * 100) / 100).toFixed(2));
   }
 
   formatReceipt () {
     let receipt = [];
-    for (let [key, value] of Object.entries(this.order)) {
-      this.customerName = key;
-      receipt.push(`${this.customerName}`);
-      this.items = value;
-      for (let [key, value] of Object.entries(this.items)) {
-        this.itemName = key;
-        this.amount = value.amount;
-        receipt.push(`${this.amount} x ${this.itemName}`);
+    // First we add the restaurant information
+    receipt.push(new Date().toLocaleString());
+    receipt.push(this.shopInfo.getShopName());
+    receipt.push(this.shopInfo.getAddress());
+    receipt.push(this.shopInfo.getPhoneNumber());
+    receipt.push("Voucher 10% off all Muffins");
+    receipt.push("Valid 2022/08/01 to 2022/08/31");
+
+    // Add order information
+    for (let [key, value] of Object.entries(this.order.getOrders())) {
+      receipt.push(`${key}`);
+      for (let [itemName, item] of Object.entries(value)) {
+        let amount = item.amount;
+        let price = item.price;
+        receipt.push(`${itemName} ${amount} x ${price}`);
       }
     }
-    return receipt.join('\n');
+
+    // We add the billing information now
+    let totalPrice = this.getPreTaxTotal();
+    let totalTax = this.getTotalTax(totalPrice);
+    receipt.push(`Tax: ${totalTax}`);
+    receipt.push(`Total: ${totalPrice + totalTax}`);
+    receipt.push(`Cash: ${this.payment}`);
+    receipt.push(`Change: ${this.payment - (totalPrice + totalTax)}`)
+    return receipt;
   }
 
   printReceipt () {
-    console.log(this.formatReceipt());
-    return this.formatReceipt();
+    let receipt = this.formatReceipt().join('\n');
+    console.log(receipt);
+    return receipt;
   }
 }
 
 module.exports = Till;
- 

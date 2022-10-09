@@ -1,36 +1,26 @@
 const ShopInfo = require('./shopInfo')
-const shopInfo = new ShopInfo;
+const shopInfo = new ShopInfo
 
-class Order {
+class OrdersBill {
   constructor () {
-    this.order = {};
+    this.orders = {};
   }
 
-  printMenu () {
-    console.log(shopInfo.formatMenu());
-    return shopInfo.formatMenu();
-  }
-
-  getOrder () {
-    return this.order;
+  getOrders () {
+    return this.orders;
   }
 
   addOrder (item, customer) {
-    if (!(customer in this.order)) {
-      this.order[customer] = {};
+    if (!(customer in this.orders)) {
+      this.orders[customer] = {};
     }
-    if (item in shopInfo.getMenu() && !(item in this.order[customer])) {
-      this.order[customer][item] = {price: shopInfo.getMenu()[item], amount: 1};
-    } else if (item in this.order[customer]) {
-      this.order[customer][item].price += shopInfo.getMenu()[item];
-      this.order[customer][item].amount++;
+    if (item in shopInfo.getMenu() && !(item in this.orders[customer])) {
+      this.orders[customer][item] = {price: shopInfo.getMenu()[item], amount: 1};
+    } else if (item in this.orders[customer]) {
+      this.orders[customer][item].amount++;
     }
   }
 
-  printReceipt () {
-    console.log(this.formatReceipt());
-    return this.formatReceipt();
-  }
 }
 
-module.exports = Order;
+module.exports = OrdersBill;
